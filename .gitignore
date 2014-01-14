@@ -6,6 +6,9 @@
 *.user
 *.sln.docstates
 
+# FMOD API folders - See http://www.fmod.org for download and installation
+fmod/
+
 # Build results
 
 [Dd]ebug/
