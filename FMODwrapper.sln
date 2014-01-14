@@ -1,0 +1,26 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 11.00
+# Visual Studio 2010
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "FMODwrapper", "FMODwrapper\FMODwrapper.vcxproj", "{4B554AA0-0100-4464-92BD-B3636141A8BA}"
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "FMODWrapperTest", "FMODWrapperTest\FMODWrapperTest.vcxproj", "{2A0FD352-52B0-4335-8CD5-715D9A79332E}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Win32 = Debug|Win32
+		Release|Win32 = Release|Win32
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{4B554AA0-0100-4464-92BD-B3636141A8BA}.Debug|Win32.ActiveCfg = Debug|Win32
+		{4B554AA0-0100-4464-92BD-B3636141A8BA}.Debug|Win32.Build.0 = Debug|Win32
+		{4B554AA0-0100-4464-92BD-B3636141A8BA}.Release|Win32.ActiveCfg = Release|Win32
+		{4B554AA0-0100-4464-92BD-B3636141A8BA}.Release|Win32.Build.0 = Release|Win32
+		{2A0FD352-52B0-4335-8CD5-715D9A79332E}.Debug|Win32.ActiveCfg = Debug|Win32
+		{2A0FD352-52B0-4335-8CD5-715D9A79332E}.Debug|Win32.Build.0 = Debug|Win32
+		{2A0FD352-52B0-4335-8CD5-715D9A79332E}.Release|Win32.ActiveCfg = Release|Win32
+		{2A0FD352-52B0-4335-8CD5-715D9A79332E}.Release|Win32.Build.0 = Release|Win32
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+EndGlobal
