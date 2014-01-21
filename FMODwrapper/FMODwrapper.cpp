@@ -60,7 +60,7 @@ namespace tbyte
 		// if this class stores them in a container, loop through it and call DestroySound() on each of them
 	}
 
-	FMOD::Sound * SoundSystem::CreateSoundFX(const char * a_cFilePath, bool a_bLoop=false)
+	FMOD::Sound * SoundSystem::CreateSoundFX(const char * a_cFilePath, int a_iLoopCount=0)
 	{
 		SoundList.emplace_back(new SoundFile);
 
@@ -70,16 +70,17 @@ namespace tbyte
 		m_Status = FMODSystem->createSound(a_cFilePath, FMOD_DEFAULT, 0, &SoundList.back()->FMODSoundInstance);
 
 		// Assign loop flag
-		if (a_bLoop)
+		if (a_iLoopCount != 0)
 		{
 			SoundList.back()->FMODSoundInstance->setMode(FMOD_LOOP_NORMAL);
+			SoundList.back()->FMODSoundInstance->setLoopCount(a_iLoopCount);
 		}
 
 		// Return the pointer to the sound for management purposes
 		return SoundList.back()->FMODSoundInstance;
 	}
 
-	void SoundSystem::PlaySoundFX(FMOD::Sound * a_Sound, bool a_bIsMusic)
+	FMOD::Channel * SoundSystem::PlaySoundFX(FMOD::Sound * a_Sound, bool a_bIsMusic)
 	{
 		// Create a Channel
 		FMOD::Channel * SFXChannel;
@@ -89,6 +90,8 @@ namespace tbyte
 
 		// Assign the Channel
 		SFXChannel->setChannelGroup(a_bIsMusic ? MusicChannel : SoundChannel);
+
+		return SFXChannel;
 	}
 
 	void SoundSystem::DestroySoundFX(FMOD::Sound* a_Sound)

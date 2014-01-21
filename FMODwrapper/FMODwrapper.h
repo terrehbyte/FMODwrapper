@@ -16,6 +16,8 @@ namespace tbyte
 	{
 	public:
 		FMOD::Sound * FMODSoundInstance;
+		// todo: make this a fully-fledged class that has member functions for playing and stopping
+		// when created by SoundSystem, give it a pointer to SoundSystem for FMOD::Sound access
 	};
 
 	// Consider placing all sounds in a container for management
@@ -31,6 +33,7 @@ namespace tbyte
 		FMOD::ChannelGroup *	MusicChannel;
 		FMOD::ChannelGroup *	SoundChannel;
 
+		// Vector of pointers to sounds
 		std::vector<SoundFile *> SoundList;
 
 	public:
@@ -38,10 +41,10 @@ namespace tbyte
 		~SoundSystem();
 
 		// Allocate memory to the sound
-		FMOD::Sound *	CreateSoundFX(const char * a_cFilePath, bool a_bLoop);
+		FMOD::Sound	*	CreateSoundFX(const char * a_cFilePath, int a_iLoopCount);
 
 		// Playback the sound
-		void			PlaySoundFX(FMOD::Sound * a_Sound, bool a_bIsMusic);
+		FMOD::Channel *	PlaySoundFX(FMOD::Sound * a_Sound, bool a_bIsMusic);
 
 		// Deallocation of sound file/stream from memory
 		void			DestroySoundFX(FMOD::Sound* a_Sound);
