@@ -60,16 +60,15 @@ namespace tbyte
 		// if this class stores them in a container, loop through it and call DestroySound() on each of them
 	}
 
-	FMOD::Sound * SoundSystem::CreateSoundFX(const char * a_cFilePath, int a_iLoopCount=0)
+	SoundFile * SoundSystem::CreateSoundFX(const char * a_cFilePath, const int a_iLoopCount=0)
 	{
+		// Store pointer to newly created SoundFile
 		SoundList.emplace_back(new SoundFile);
-
-		SoundList.back()->FMODSoundInstance;
 
 		// Initialize the sound file
 		m_Status = FMODSystem->createSound(a_cFilePath, FMOD_DEFAULT, 0, &SoundList.back()->FMODSoundInstance);
 
-		// Assign loop flag
+		// Assign loop flag if applicable
 		if (a_iLoopCount != 0)
 		{
 			SoundList.back()->FMODSoundInstance->setMode(FMOD_LOOP_NORMAL);
@@ -77,31 +76,45 @@ namespace tbyte
 		}
 
 		// Return the pointer to the sound for management purposes
-		return SoundList.back()->FMODSoundInstance;
+		return SoundList.back();
 	}
 
-	FMOD::Channel * SoundSystem::PlaySoundFX(FMOD::Sound * a_Sound, bool a_bIsMusic)
+	FMOD::Channel * SoundSystem::PlaySoundFX(SoundFile * a_Sound, bool a_bIsMusic)
 	{
 		// Create a Channel
 		FMOD::Channel * SFXChannel;
 
 		// Play the Sound
-		m_Status = FMODSystem->playSound(a_Sound, 0, false, &SFXChannel);
+		m_Status = FMODSystem->playSound(a_Sound->FMODSoundInstance, 0, false, &SFXChannel);
 
 		// Assign the Channel
 		SFXChannel->setChannelGroup(a_bIsMusic ? MusicChannel : SoundChannel);
 
+		// Return the Channel to offer control to the programmer over playback and volume
 		return SFXChannel;
 	}
 
-	void SoundSystem::DestroySoundFX(FMOD::Sound* a_Sound)
+	void SoundSystem::DestroySoundFX(SoundFile * a_Sound)
 	{
 		// Call FMOD::Sound::release on the sound file/stream
-		m_Status = a_Sound->release();
+		m_Status = a_Sound->FMODSoundInstance->release();
 	}
 
 	void SoundSystem::UpdateSystem()
 	{
+		// FMOD Update System - Perform necessary system upkeep routines
 		FMODSystem->update();
+	}
+
+	// Set Sound Group Volume
+	void SoundSystem::SetSoundVolume(const float a_fNewVolume)
+	{
+		SoundChannel->setVolume(a_fNewVolume);
+	}
+		
+	// Get Music Group Volume
+	void SoundSystem::SetMusicVolume(const float a_fNewVolume)
+	{
+		MusicChannel->setVolume(a_fNewVolume);
 	}
 }

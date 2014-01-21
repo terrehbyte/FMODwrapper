@@ -20,6 +20,9 @@ namespace tbyte
 		// when created by SoundSystem, give it a pointer to SoundSystem for FMOD::Sound access
 	};
 
+	// Instead of the above, consider creating an additional wrapper class that will
+	// provide basic functions such as volume control for specific tbyte::SoundFile instances
+
 	// Consider placing all sounds in a container for management
 	class SoundSystem
 	{
@@ -29,10 +32,6 @@ namespace tbyte
 		// Success/Fail of last recorded FMOD action
 		FMOD_RESULT		m_Status;
 
-		// Sound Channel Groups
-		FMOD::ChannelGroup *	MusicChannel;
-		FMOD::ChannelGroup *	SoundChannel;
-
 		// Vector of pointers to sounds
 		std::vector<SoundFile *> SoundList;
 
@@ -40,16 +39,27 @@ namespace tbyte
 		SoundSystem();
 		~SoundSystem();
 
+		// Sound Channel Groups
+		FMOD::ChannelGroup *	MusicChannel;
+		FMOD::ChannelGroup *	SoundChannel;
+
 		// Allocate memory to the sound
-		FMOD::Sound	*	CreateSoundFX(const char * a_cFilePath, int a_iLoopCount);
+		SoundFile *	CreateSoundFX(const char * a_cFilePath, const int a_iLoopCount);
 
 		// Playback the sound
-		FMOD::Channel *	PlaySoundFX(FMOD::Sound * a_Sound, bool a_bIsMusic);
+		FMOD::Channel *	PlaySoundFX(SoundFile * a_Sound, bool a_bIsMusic);
 
 		// Deallocation of sound file/stream from memory
-		void			DestroySoundFX(FMOD::Sound* a_Sound);
+		void			DestroySoundFX(SoundFile * a_Sound);
 		
+		// FMOD Update System - Perform necessary system upkeep routines
 		void			UpdateSystem();
+
+		// Set Sound Group Volume
+		void			SetSoundVolume(const float a_fNewVolume);
+		
+		// Get Music Group Volume
+		void			SetMusicVolume(const float a_fNewVolume);
 	
 	};
 }
