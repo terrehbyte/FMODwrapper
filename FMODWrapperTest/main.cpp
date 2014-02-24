@@ -1,6 +1,6 @@
-// Remember to go to FMODwrapper.h and redefine the "#include"
-// directives so the wrapper can access the FMOD library!
-#include "FMODwrapper.h"
+#include <fmod\fmod.hpp>
+#include <fmod\fmod_errors.h>
+#include <FMODwrapper.h>
 
 #include <iostream>
 void main ()
