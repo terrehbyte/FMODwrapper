@@ -10,9 +10,8 @@ Visual Studio 2010
 
 This installation guide assumes that you are capable of at least including the header and library files necessary for using FMOD Version 1.02.12 (the most up-to-date version at the time of writing).
 
-1. Include FMOD header and library files.
-2. Include the wrapper header and add the wrapper source file.
-3. Modify the wrapper header to include the FMOD header.
+1. Include FMOD.hpp and FMOD_errors.h. These always come before the wrapper header.
+2. Include the wrapper header.
 
 Basic Usage
 ===========
