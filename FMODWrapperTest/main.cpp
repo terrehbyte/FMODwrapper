@@ -7,7 +7,7 @@ void main ()
 {
 	tbyte::SoundSystem MyFirstSoundSystem;
 
-	tbyte::SoundFile * MyFirstSound = MyFirstSoundSystem.CreateSoundFX("test.ogg", -1);
+    FMOD::Sound * MyFirstSound = MyFirstSoundSystem.CreateSoundFX("test.ogg", -1);
 
 	MyFirstSoundSystem.PlaySoundFX(MyFirstSound, true);
 

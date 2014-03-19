@@ -14,19 +14,6 @@
 
 namespace tbyte
 {
-	// PURPOSE: To allow FMOD::Sound to be put into vectors that would otherwise call its
-	// private constructor.
-	class SoundFile
-	{
-	public:
-		FMOD::Sound * FMODSoundInstance;
-		// todo: make this a fully-fledged class that has member functions for playing and stopping
-		// when created by SoundSystem, give it a pointer to SoundSystem for FMOD::Sound access
-	};
-
-	// Instead of the above, consider creating an additional wrapper class that will
-	// provide basic functions such as volume control for specific tbyte::SoundFile instances
-
 	// Consider placing all sounds in a container for management
 	class SoundSystem
 	{
@@ -37,7 +24,7 @@ namespace tbyte
 		FMOD_RESULT		m_Status;
 
 		// Vector of pointers to sounds
-		std::vector<SoundFile *> SoundList;
+		std::vector<FMOD::Sound *> SoundList;
 
 	public:
 		SoundSystem();
@@ -48,13 +35,13 @@ namespace tbyte
 		FMOD::ChannelGroup *	SoundChannel;
 
 		// Allocate memory to the sound
-		SoundFile *	CreateSoundFX(const char * a_cFilePath, const int a_iLoopCount);
+		FMOD::Sound *	CreateSoundFX(const char * a_cFilePath, const int a_iLoopCount);
 
 		// Playback the sound
-		FMOD::Channel *	PlaySoundFX(SoundFile * a_Sound, bool a_bIsMusic);
+		FMOD::Channel *	PlaySoundFX(FMOD::Sound * a_Sound, bool a_bIsMusic);
 
 		// Deallocation of sound file/stream from memory
-		void			DestroySoundFX(SoundFile * a_Sound);
+		void			DestroySoundFX(FMOD::Sound * a_Sound);
 		
 		// FMOD Update System - Perform necessary system upkeep routines
 		void			UpdateSystem();
@@ -114,43 +101,43 @@ namespace tbyte
 		FMODSystem->release();
 
 		// Release Sound Resources
-		for(std::vector<SoundFile *>::iterator it=SoundList.begin(); // place iterator at beginning
+		for(std::vector<FMOD::Sound *>::iterator it=SoundList.begin(); // place iterator at beginning
 			it != SoundList.end(); // run while iterator is not at the end
 			++it				// advance iterator
 			)
 		{
-			(*it)->FMODSoundInstance->release();
+			(*it)->release();
 		}
 
 		// if this class stores them in a container, loop through it and call DestroySound() on each of them
 	}
 
-	inline SoundFile * SoundSystem::CreateSoundFX(const char * a_cFilePath, const int a_iLoopCount=0)
+	inline FMOD::Sound * SoundSystem::CreateSoundFX(const char * a_cFilePath, const int a_iLoopCount=0)
 	{
-		// Store pointer to newly created SoundFile
-		SoundList.emplace_back(new SoundFile);
+		// Store pointer to newly created FMOD::Sound
+        SoundList.emplace_back(nullptr);
 
 		// Initialize the sound file
-		m_Status = FMODSystem->createSound(a_cFilePath, FMOD_DEFAULT, 0, &SoundList.back()->FMODSoundInstance);
+		m_Status = FMODSystem->createSound(a_cFilePath, FMOD_DEFAULT, 0, &SoundList.back());
 
 		// Assign loop flag if applicable
 		if (a_iLoopCount != 0)
 		{
-			SoundList.back()->FMODSoundInstance->setMode(FMOD_LOOP_NORMAL);
-			SoundList.back()->FMODSoundInstance->setLoopCount(a_iLoopCount);
+			SoundList.back()->setMode(FMOD_LOOP_NORMAL);
+			SoundList.back()->setLoopCount(a_iLoopCount);
 		}
 
 		// Return the pointer to the sound for management purposes
 		return SoundList.back();
 	}
 
-	inline FMOD::Channel * SoundSystem::PlaySoundFX(SoundFile * a_Sound, bool a_bIsMusic)
+	inline FMOD::Channel * SoundSystem::PlaySoundFX(FMOD::Sound * a_Sound, bool a_bIsMusic)
 	{
 		// Create a Channel
 		FMOD::Channel * SFXChannel;
 
 		// Play the Sound
-		m_Status = FMODSystem->playSound(a_Sound->FMODSoundInstance, 0, false, &SFXChannel);
+		m_Status = FMODSystem->playSound(a_Sound, 0, false, &SFXChannel);
 
 		// Assign the Channel
 		SFXChannel->setChannelGroup(a_bIsMusic ? MusicChannel : SoundChannel);
@@ -159,10 +146,10 @@ namespace tbyte
 		return SFXChannel;
 	}
 
-	inline void SoundSystem::DestroySoundFX(SoundFile * a_Sound)
+	inline void SoundSystem::DestroySoundFX(FMOD::Sound * a_Sound)
 	{
 		// Call FMOD::Sound::release on the sound file/stream
-		m_Status = a_Sound->FMODSoundInstance->release();
+		m_Status = a_Sound->release();
 	}
 
 	inline void SoundSystem::UpdateSystem()
